@@ -185,7 +185,7 @@
         <button type="submit" class="entrar">Cadastrar 🧁</button>
         <div class="sucesso" id="sucesso">Cadastro realizado com sucesso! Bem-vindo(a) 💖</div>
       </form>
-      <p class="cadastro">Já tem uma conta? <a href="loguin_page.html">Entrar</a></p>
+      <p class="cadastro">Já tem uma conta? <a href="<?= $base ?>/">Entrar</a></p>
     </main>
     <script>
   const $ = (id) => document.getElementById(id);
@@ -276,13 +276,48 @@
       'As senhas não coincidem.'));
 
     if (resultados.every(Boolean)) {
-      // Aqui você conectaria com o seu back-end (API de cadastro).
-      sucesso.style.display = 'block';
-      sucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      enviar();
     } else {
       const primeiro = form.querySelector('input.erro');
       if (primeiro) primeiro.focus();
     }
   });
+
+  // Envia os dados para o servidor (grava no banco de dados)
+  async function enviar() {
+    const botao = form.querySelector('button.entrar');
+    const campos = ['nome', 'nascimento', 'cpf', 'email', 'email2', 'telefone',
+                    'rua', 'bairro', 'numero', 'senha', 'senha2'];
+    const corpo = {};
+    campos.forEach((id) => (corpo[id] = $(id).value));
+
+    botao.disabled = true;
+    try {
+      const resp = await fetch('<?= $base ?>/api/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(corpo),
+      });
+      const dados = await resp.json();
+
+      if (resp.ok && dados.ok) {
+        form.reset();
+        sucesso.textContent = 'Cadastro realizado com sucesso! Bem-vindo(a) 💖';
+        sucesso.style.display = 'block';
+        sucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => (window.location.href = '<?= $base ?>/'), 2500);
+      } else if (dados.erros) {
+        Object.entries(dados.erros).forEach(([id, msg]) => marcar(id, false, msg));
+        const primeiro = form.querySelector('input.erro');
+        if (primeiro) primeiro.focus();
+      } else {
+        alert(dados.mensagem || 'Não foi possível concluir o cadastro.');
+      }
+    } catch (e) {
+      alert('Não foi possível conectar ao servidor. Tente novamente.');
+    } finally {
+      botao.disabled = false;
+    }
+  }
 </script> </body>
 </html>

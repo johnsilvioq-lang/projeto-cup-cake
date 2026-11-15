@@ -160,8 +160,24 @@
     if (!senhaValida) ok = false;
 
     if (ok) {
-      // Aqui você conectaria com o seu back-end (API de autenticação).
-      sucesso.style.display = 'block';
+      fetch('<?= $base ?>/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.value, senha: senha.value }),
+      })
+        .then((r) => r.json())
+        .then((dados) => {
+          if (dados.ok) {
+            sucesso.textContent = 'Login realizado com sucesso! Bem-vindo(a), ' + dados.nome + ' 💖';
+            sucesso.style.display = 'block';
+          } else {
+            erroSenha.textContent = dados.mensagem || 'E-mail ou senha incorretos.';
+            senha.classList.add('erro');
+          }
+        })
+        .catch(() => {
+          erroSenha.textContent = 'Não foi possível conectar ao servidor.';
+        });
     }
   });
 </script> </body>
