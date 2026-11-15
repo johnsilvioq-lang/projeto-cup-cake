@@ -6,7 +6,6 @@
     <title>Dulcen Cup Cakes | Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&amp;family=Nunito:wght@400;600;700&amp;display=swap"
-
       rel="stylesheet">
     <style>
   :root {
@@ -106,22 +105,16 @@
   <body>
     <main class="card">
       <div class="logo"> <img class="logo-img" src="https://i.ibb.co/5gYVr1PL/logo-t.png"
-
           alt="Logo Dulcen Cup Cakes">
         <p>Cupcakes artesanais feitos com amor</p>
       </div>
       <form id="form-login" novalidate=""> <label for="email">E-mail</label>
         <div class="campo"> <input id="email" placeholder="voce@exemplo.com" autocomplete="email"
-
             required="" type="email"> </div>
-        <div class="msg-erro" id="erro-email"></div>
         <label for="senha">Senha</label>
         <div class="campo"> <input id="senha" placeholder="Digite sua senha" autocomplete="current-password"
-
             required="" type="password"> <button type="button" class="olho" id="toggle"
-
             aria-label="Mostrar senha">👁️</button> </div>
-        <div class="msg-erro" id="erro-senha"></div>
         <div class="opcoes"> <label><input type="checkbox"> Lembrar de mim</label>
           <a href="#">Esqueci a senha</a> </div>
         <button type="submit" class="entrar">Entrar 🧁</button>
@@ -160,24 +153,8 @@
     if (!senhaValida) ok = false;
 
     if (ok) {
-      fetch('<?= $base ?>/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.value, senha: senha.value }),
-      })
-        .then((r) => r.json())
-        .then((dados) => {
-          if (dados.ok) {
-            sucesso.textContent = 'Login realizado com sucesso! Bem-vindo(a), ' + dados.nome + ' 💖';
-            sucesso.style.display = 'block';
-          } else {
-            erroSenha.textContent = dados.mensagem || 'E-mail ou senha incorretos.';
-            senha.classList.add('erro');
-          }
-        })
-        .catch(() => {
-          erroSenha.textContent = 'Não foi possível conectar ao servidor.';
-        });
+      // Aqui você conectaria com o seu back-end (API de autenticação).
+      sucesso.style.display = 'block';
     }
   });
 </script> </body>

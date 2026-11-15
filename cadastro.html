@@ -33,7 +33,7 @@
   }
   .card {
     width: 100%;
-    max-width: 480px;
+    max-width: 400px;
     background: #fff;
     border-radius: 24px;
     padding: 32px 32px 28px;
@@ -50,16 +50,8 @@
     text-align: center;
     margin: 8px 0 4px;
   }
-  .secao {
-    margin-top: 22px; padding-bottom: 6px;
-    font-weight: 700; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
-    color: var(--rosa-escuro); border-bottom: 2px solid var(--rosa-claro);
-  }
   label { display: block; font-weight: 700; font-size: .9rem; margin: 14px 0 6px; }
   .campo { position: relative; }
-  .linha { display: flex; gap: 12px; }
-  .linha > div { flex: 1; min-width: 0; }
-  .linha > div.pequeno { flex: 0 0 110px; }
   input {
     width: 100%;
     padding: 13px 14px;
@@ -104,88 +96,41 @@
     display: none; margin-top: 16px; padding: 12px; text-align: center;
     background: #e8f7ee; color: #1e7a45; border-radius: 12px; font-weight: 700; font-size: .9rem;
   }
-  @media (max-width: 440px) {
-    .card { padding: 28px 20px 24px; }
-    .linha { flex-direction: column; gap: 0; }
-    .linha > div.pequeno { flex: 1; }
-  }
 </style> </head>
   <body>
     <main class="card">
-      <div class="logo"> <img class="logo-img" src="https://i.ibb.co/5gYVr1PL/logo-t.png" alt="Logo Dulcen Cup Cakes">
+      <div class="logo"> <img class="logo-img" src="https://i.ibb.co/5gYVr1PL/logo-t.png"
+          alt="Logo Dulcen Cup Cakes">
         <p>Cupcakes artesanais feitos com amor</p>
       </div>
       <h2>Crie sua conta</h2>
       <form id="form-cadastro" novalidate>
 
-        <div class="secao">Dados pessoais</div>
-
-        <label for="nome">Nome completo</label>
+        <label for="nome">Nome</label>
         <input id="nome" placeholder="Seu nome completo" autocomplete="name" required type="text">
         <div class="msg-erro" id="erro-nome"></div>
 
-        <div class="linha">
-          <div>
-            <label for="nascimento">Data de nascimento</label>
-            <input id="nascimento" autocomplete="bday" required type="date">
-            <div class="msg-erro" id="erro-nascimento"></div>
-          </div>
-          <div>
-            <label for="cpf">CPF</label>
-            <input id="cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14" required type="text">
-            <div class="msg-erro" id="erro-cpf"></div>
-          </div>
-        </div>
-
-        <div class="secao">Contato</div>
-
-        <label for="email">E-mail</label>
-        <input id="email" placeholder="voce@exemplo.com" autocomplete="email" required type="email">
-        <div class="msg-erro" id="erro-email"></div>
-
-        <label for="email2">Confirmar e-mail</label>
-        <input id="email2" placeholder="Repita seu e-mail" autocomplete="off" required type="email">
-        <div class="msg-erro" id="erro-email2"></div>
+        <label for="cpf">CPF</label>
+        <input id="cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14" required type="text">
+        <div class="msg-erro" id="erro-cpf"></div>
 
         <label for="telefone">Telefone</label>
         <input id="telefone" placeholder="(11) 91234-5678" autocomplete="tel" inputmode="tel" maxlength="15" required type="tel">
         <div class="msg-erro" id="erro-telefone"></div>
 
-        <div class="secao">Endereço</div>
-
-        <label for="rua">Rua</label>
-        <input id="rua" placeholder="Nome da rua" autocomplete="address-line1" required type="text">
-        <div class="msg-erro" id="erro-rua"></div>
-
-        <div class="linha">
-          <div>
-            <label for="bairro">Bairro</label>
-            <input id="bairro" placeholder="Seu bairro" required type="text">
-            <div class="msg-erro" id="erro-bairro"></div>
-          </div>
-          <div class="pequeno">
-            <label for="numero">Número</label>
-            <input id="numero" placeholder="Nº" inputmode="numeric" required type="text">
-            <div class="msg-erro" id="erro-numero"></div>
-          </div>
-        </div>
-
-        <div class="secao">Acesso</div>
+        <label for="email">E-mail</label>
+        <input id="email" placeholder="voce@exemplo.com" autocomplete="email" required type="email">
+        <div class="msg-erro" id="erro-email"></div>
 
         <label for="senha">Senha</label>
         <div class="campo"> <input id="senha" placeholder="Mínimo de 6 caracteres" autocomplete="new-password" required type="password">
-          <button type="button" class="olho" data-alvo="senha" aria-label="Mostrar senha">👁️</button> </div>
+          <button type="button" class="olho" id="toggle" aria-label="Mostrar senha">👁️</button> </div>
         <div class="msg-erro" id="erro-senha"></div>
-
-        <label for="senha2">Confirmar senha</label>
-        <div class="campo"> <input id="senha2" placeholder="Repita sua senha" autocomplete="new-password" required type="password">
-          <button type="button" class="olho" data-alvo="senha2" aria-label="Mostrar senha">👁️</button> </div>
-        <div class="msg-erro" id="erro-senha2"></div>
 
         <button type="submit" class="entrar">Cadastrar 🧁</button>
         <div class="sucesso" id="sucesso">Cadastro realizado com sucesso! Bem-vindo(a) 💖</div>
       </form>
-      <p class="cadastro">Já tem uma conta? <a href="<?= $base ?>/">Entrar</a></p>
+      <p class="cadastro">Já tem uma conta? <a href="loguin_page.html">Entrar</a></p>
     </main>
     <script>
   const $ = (id) => document.getElementById(id);
@@ -193,16 +138,13 @@
   const sucesso = $('sucesso');
 
   // Mostrar/ocultar senha
-  document.querySelectorAll('.olho').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const campo = $(btn.dataset.alvo);
-      const oculto = campo.type === 'password';
-      campo.type = oculto ? 'text' : 'password';
-      btn.textContent = oculto ? '🙈' : '👁️';
-    });
+  $('toggle').addEventListener('click', () => {
+    const oculto = $('senha').type === 'password';
+    $('senha').type = oculto ? 'text' : 'password';
+    $('toggle').textContent = oculto ? '🙈' : '👁️';
   });
 
-  // Máscaras
+  // Máscara de CPF
   $('cpf').addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '').slice(0, 11);
     v = v.replace(/(\d{3})(\d)/, '$1.$2')
@@ -211,6 +153,7 @@
     e.target.value = v;
   });
 
+  // Máscara de telefone
   $('telefone').addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '').slice(0, 11);
     if (v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
@@ -219,11 +162,7 @@
     e.target.value = v;
   });
 
-  $('numero').addEventListener('input', (e) => {
-    e.target.value = e.target.value.replace(/[^\dA-Za-z\/-]/g, '');
-  });
-
-  // Validação de CPF
+  // Validação de CPF (dígitos verificadores)
   function cpfValido(cpf) {
     cpf = cpf.replace(/\D/g, '');
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
@@ -250,74 +189,26 @@
     resultados.push(marcar('nome', $('nome').value.trim().split(/\s+/).length >= 2,
       'Digite seu nome completo.'));
 
-    const nasc = $('nascimento').value;
-    const nascValido = nasc !== '' && new Date(nasc) <= new Date() && nasc >= '1900-01-01';
-    resultados.push(marcar('nascimento', nascValido, 'Informe uma data válida.'));
-
     resultados.push(marcar('cpf', cpfValido($('cpf').value), 'CPF inválido.'));
-
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('email').value.trim());
-    resultados.push(marcar('email', emailOk, 'Digite um e-mail válido.'));
-    resultados.push(marcar('email2',
-      emailOk && $('email2').value.trim().toLowerCase() === $('email').value.trim().toLowerCase(),
-      'Os e-mails não coincidem.'));
 
     const tel = $('telefone').value.replace(/\D/g, '');
     resultados.push(marcar('telefone', tel.length === 10 || tel.length === 11,
       'Digite um telefone com DDD.'));
 
-    resultados.push(marcar('rua', $('rua').value.trim().length >= 3, 'Informe a rua.'));
-    resultados.push(marcar('bairro', $('bairro').value.trim().length >= 2, 'Informe o bairro.'));
-    resultados.push(marcar('numero', $('numero').value.trim().length >= 1, 'Informe o número.'));
+    resultados.push(marcar('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($('email').value.trim()),
+      'Digite um e-mail válido.'));
 
-    const senhaOk = $('senha').value.length >= 6;
-    resultados.push(marcar('senha', senhaOk, 'A senha deve ter pelo menos 6 caracteres.'));
-    resultados.push(marcar('senha2', senhaOk && $('senha2').value === $('senha').value,
-      'As senhas não coincidem.'));
+    resultados.push(marcar('senha', $('senha').value.length >= 6,
+      'A senha deve ter pelo menos 6 caracteres.'));
 
     if (resultados.every(Boolean)) {
-      enviar();
+      // Aqui você conectaria com o seu back-end (API de cadastro).
+      sucesso.style.display = 'block';
+      form.reset();
     } else {
       const primeiro = form.querySelector('input.erro');
       if (primeiro) primeiro.focus();
     }
   });
-
-  // Envia os dados para o servidor (grava no banco de dados)
-  async function enviar() {
-    const botao = form.querySelector('button.entrar');
-    const campos = ['nome', 'nascimento', 'cpf', 'email', 'email2', 'telefone',
-                    'rua', 'bairro', 'numero', 'senha', 'senha2'];
-    const corpo = {};
-    campos.forEach((id) => (corpo[id] = $(id).value));
-
-    botao.disabled = true;
-    try {
-      const resp = await fetch('<?= $base ?>/api/usuarios', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(corpo),
-      });
-      const dados = await resp.json();
-
-      if (resp.ok && dados.ok) {
-        form.reset();
-        sucesso.textContent = 'Cadastro realizado com sucesso! Bem-vindo(a) 💖';
-        sucesso.style.display = 'block';
-        sucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => (window.location.href = '<?= $base ?>/'), 2500);
-      } else if (dados.erros) {
-        Object.entries(dados.erros).forEach(([id, msg]) => marcar(id, false, msg));
-        const primeiro = form.querySelector('input.erro');
-        if (primeiro) primeiro.focus();
-      } else {
-        alert(dados.mensagem || 'Não foi possível concluir o cadastro.');
-      }
-    } catch (e) {
-      alert('Não foi possível conectar ao servidor. Tente novamente.');
-    } finally {
-      botao.disabled = false;
-    }
-  }
 </script> </body>
 </html>
