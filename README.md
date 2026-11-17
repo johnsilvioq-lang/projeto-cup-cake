@@ -175,3 +175,8 @@ Armazena os itens individuais que compõem cada pedido.
 3. **Consistência de Transações:** A finalização de pedidos utiliza transações SQL (`beginTransaction` / `commit` / `rollBack`) para garantir que dados de cabeçalho e itens do pedido nunca fiquem dessincronizados em caso de falha.
 
 4. **Controle de Acesso:** Rotas sensíveis (como `pedidos.php` e ações de carrinho/checkout) validam a existência da variável de sessão `$_SESSION['usuario']`, redirecionando usuários não autenticados para a página de login.
+
+ #### 4. APLICAÇÃO PUBLICA
+
+   o pagina esta disponível online atraves do link:
+   johnsilvioprojetos.rf.gd/index.php
