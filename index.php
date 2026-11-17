@@ -100,27 +100,17 @@ $usuario = $_SESSION['usuario'] ?? null;
   }
   .contato h4 { font-family: 'Pacifico', cursive; font-weight: 400; color: var(--rosa-escuro); font-size: 1.2rem; margin-bottom: 2px; }
 
-  /* ---------- Modal de login ---------- */
-  .fundo-modal {
-    position: fixed; inset: 0; background: rgba(74,44,58,.45);
-    display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  /* ---------- Botão Voltar ao Topo ---------- */
+  .btn-topo {
+    position: fixed; bottom: 24px; left: 24px; width: 46px; height: 46px;
+    background: var(--rosa); color: #fff; border: none; border-radius: 50%;
+    font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(238, 127, 150, 0.4); cursor: pointer; z-index: 40;
+    opacity: 0; visibility: hidden; transform: translateY(10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background 0.15s;
   }
-  .fundo-modal.aberto { display: flex; }
-  .modal {
-    background: #fff; border-radius: 24px; width: 100%; max-width: 380px; padding: 28px 26px 24px;
-    box-shadow: 0 20px 50px rgba(0,0,0,.25); position: relative;
-  }
-  .modal h3 { font-family: 'Pacifico', cursive; font-weight: 400; color: var(--rosa-escuro); font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
-  .fechar { position: absolute; top: 10px; right: 14px; background: none; border: none; font-size: 1.6rem; color: var(--cinza); }
-  label { display: block; font-weight: 700; font-size: .88rem; margin: 14px 0 6px; }
-  input {
-    width: 100%; padding: 12px 14px; border: 2px solid var(--rosa-claro); border-radius: 12px;
-    font: inherit; background: #fffafc; color: var(--texto);
-  }
-  input:focus { outline: none; border-color: var(--rosa); box-shadow: 0 0 0 4px rgba(238,127,150,.18); }
-  input.erro { border-color: #d93025; }
-  .msg-erro { color: #d93025; font-size: .8rem; min-height: 1.1em; margin-top: 3px; }
-  .modal .btn { width: 100%; margin-top: 16px; }
+  .btn-topo.visivel { opacity: 1; visibility: visible; transform: translateY(0); }
+  .btn-topo:hover { background: var(--rosa-escuro); transform: translateY(-2px); }
 
   /* ---------- Carrinho (painel lateral) ---------- */
   .painel {
@@ -142,7 +132,12 @@ $usuario = $_SESSION['usuario'] ?? null;
   .total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 800; margin-bottom: 12px; }
   .rodape-carrinho .btn { width: 100%; }
 
-  /* ---------- Aviso ---------- */
+  .fundo-modal {
+    position: fixed; inset: 0; background: rgba(74,44,58,.45);
+    display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px;
+  }
+  .fundo-modal.aberto { display: flex; }
+
   .aviso {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(30px);
     background: var(--marrom); color: #fff; padding: 12px 22px; border-radius: 999px; font-weight: 700; font-size: .9rem;
@@ -163,10 +158,11 @@ $usuario = $_SESSION['usuario'] ?? null;
 <body>
 
 <header>
-  <img src="https://i.ibb.co/5gYVr1PL/logo-t.png" alt="logo t" border="0" width="120" height="120">
+  <img src="https://i.ibb.co/5gYVr1PL/logo-t.png" alt="logo t" border="0" width="120" height="120" class="logo-img">
   <div class="acoes">
     <button class="btn btn-contorno" id="btn-carrinho">🛒 Carrinho <span class="badge" id="contador">0</span></button>
     <?php if ($usuario): ?>
+      <a class="btn btn-contorno" href="pedidos.php">📦 Meus Pedidos</a>
       <span id="saudacao">Olá, <?= htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8') ?>!</span>
       <a class="btn btn-contorno" href="logout.php">Sair</a>
     <?php else: ?>
@@ -197,12 +193,13 @@ $usuario = $_SESSION['usuario'] ?? null;
   </address>
 </footer>
 
-<!-- Carrinho -->
+<button class="btn-topo" id="btn-topo" aria-label="Voltar ao topo">▲</button>
+
 <div class="fundo-modal" id="fundo-carrinho"></div>
 <aside class="painel" id="painel">
   <header>
     <h3>Seu carrinho</h3>
-    <button class="fechar" style="position:static" id="fechar-carrinho" aria-label="Fechar">×</button>
+    <button class="fechar" style="position:static; background:none; border:none; font-size:1.6rem; cursor:pointer;" id="fechar-carrinho" aria-label="Fechar">×</button>
   </header>
   <div class="itens" id="itens"></div>
   <div class="rodape-carrinho">
@@ -244,10 +241,9 @@ $usuario = $_SESSION['usuario'] ?? null;
   ];
 
   const brl = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  const carrinho = {}; // nome -> quantidade
+  const carrinho = {}; 
+  const usuarioLogado = <?= $usuario ? 'true' : 'false' ?>;
 
-    
-  // ---------- Vitrine ----------
   const grade = document.getElementById('grade');
   sabores.forEach(s => {
     const el = document.createElement('article');
@@ -261,17 +257,22 @@ $usuario = $_SESSION['usuario'] ?? null;
     grade.appendChild(el);
   });
 
-  // ---------- Carrinho ----------
   function adicionar(nome) {
+    if (!usuarioLogado) {
+      window.location.href = 'loguin_page.php';
+      return;
+    }
     carrinho[nome] = (carrinho[nome] || 0) + 1;
     atualizar();
     aviso(`${nome} adicionado ao carrinho 🧁`);
   }
+
   function alterar(nome, delta) {
     carrinho[nome] = (carrinho[nome] || 0) + delta;
     if (carrinho[nome] <= 0) delete carrinho[nome];
     atualizar();
   }
+
   function atualizar() {
     const itens = document.getElementById('itens');
     const nomes = Object.keys(carrinho);
@@ -297,21 +298,66 @@ $usuario = $_SESSION['usuario'] ?? null;
     document.getElementById('total').textContent = brl(total);
     document.getElementById('contador').textContent = qtdTotal;
   }
+
   const painel = document.getElementById('painel');
   const fundoCarrinho = document.getElementById('fundo-carrinho');
-  function abrirCarrinho()  { painel.classList.add('aberto');    fundoCarrinho.classList.add('aberto'); }
+  
+  function abrirCarrinho()  { 
+    if (!usuarioLogado) {
+      window.location.href = 'loguin_page.php';
+      return;
+    }
+    painel.classList.add('aberto');    
+    fundoCarrinho.classList.add('aberto'); 
+  }
   function fecharCarrinho() { painel.classList.remove('aberto'); fundoCarrinho.classList.remove('aberto'); }
+  
   document.getElementById('btn-carrinho').onclick = abrirCarrinho;
   document.getElementById('fechar-carrinho').onclick = fecharCarrinho;
   fundoCarrinho.onclick = fecharCarrinho;
+
+  // Finalizar pedido salvando no banco de dados
   document.getElementById('finalizar').onclick = () => {
     if (!Object.keys(carrinho).length) return aviso('Adicione ao menos um cupcake 🧁');
-    Object.keys(carrinho).forEach(k => delete carrinho[k]);
-    atualizar(); fecharCarrinho();
-    aviso('Pedido enviado! Entraremos em contato para confirmar 💖');
+
+    const itensArray = Object.keys(carrinho).map(nome => {
+      const s = sabores.find(x => x.nome === nome);
+      return { nome: s.nome, preco: s.preco, quantidade: carrinho[nome] };
+    });
+
+    fetch('salvar_pedido.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itens: itensArray })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.sucesso) {
+        Object.keys(carrinho).forEach(k => delete carrinho[k]);
+        atualizar(); 
+        fecharCarrinho();
+        aviso('Pedido realizado com sucesso! Veja em "Meus Pedidos" 💖');
+      } else {
+        aviso(data.mensagem || 'Erro ao finalizar pedido.');
+      }
+    })
+    .catch(() => {
+      aviso('Erro de conexão ao salvar pedido.');
+    });
   };
 
-  // ---------- Aviso ----------
+  const btnTopo = document.getElementById('btn-topo');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      btnTopo.classList.add('visivel');
+    } else {
+      btnTopo.classList.remove('visivel');
+    }
+  });
+  btnTopo.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   let timer;
   function aviso(msg) {
     const el = document.getElementById('aviso');

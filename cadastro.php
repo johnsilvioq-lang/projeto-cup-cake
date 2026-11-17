@@ -147,8 +147,10 @@ function cpf_valido(string $cpf): bool {
 </style> </head>
   <body>
     <main class="card">
-      <div class="logo"> <img class="logo-img" src="https://i.ibb.co/5gYVr1PL/logo-t.png"
-          alt="Logo Dulcen Cup Cakes">
+      <div class="logo">
+        <a href="index.php">
+          <img class="logo-img" src="https://i.ibb.co/5gYVr1PL/logo-t.png" alt="Logo Dulcen Cup Cakes">
+        </a>
         <p>Cupcakes artesanais feitos com amor</p>
       </div>
       <h2>Crie sua conta</h2>
